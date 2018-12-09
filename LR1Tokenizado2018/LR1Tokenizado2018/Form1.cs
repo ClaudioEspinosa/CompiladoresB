@@ -13,7 +13,7 @@ namespace LR1Tokenizado2018
     public partial class Form1 : Form
     {
         string cadAbrir = "";///< representa a la cadena que se abrira, todo el archivo se lee primero como una cadena grande, despues de debe separar por renglones
-
+        string[] renglonesArch;///< representa los renglones del archivo de la grámatica 
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +23,16 @@ namespace LR1Tokenizado2018
          **/
         public void abrir()
         {
+            //el archivo se llama g4 por el nombre que le da antlr a sus grámaticas
             cadAbrir = System.IO.File.ReadAllText("G4.txt");
+            renglonesArch = cadAbrir.Split('\r');//se hace un split por renglon
+            for (int i = 0; i < renglonesArch.Length; i++)
+            {
+                if (renglonesArch[i].Contains('\n'))
+                    renglonesArch[i] = renglonesArch[i].Trim('\n');//se quitan los caracteres \n, no se imprimen pero hacen ruido al analizar la cadena
+            }
+
+
 
         }
         private void lR1ToolStripMenuItem_Click(object sender, EventArgs e)
