@@ -14,9 +14,11 @@ namespace LR1Tokenizado2018
     {
         string cadAbrir = "";///< representa a la cadena que se abrira, todo el archivo se lee primero como una cadena grande, despues de debe separar por renglones
         string[] renglonesArch;///< representa los renglones del archivo de la grámatica 
+        Gramatica gramatica;
         public Form1()
         {
             InitializeComponent();
+                
         }
         /**
          * @brief Método para abrir un archivo txt 
@@ -31,6 +33,8 @@ namespace LR1Tokenizado2018
                 if (renglonesArch[i].Contains('\n'))
                     renglonesArch[i] = renglonesArch[i].Trim('\n');//se quitan los caracteres \n, no se imprimen pero hacen ruido al analizar la cadena
             }
+
+            gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
 
 
 
