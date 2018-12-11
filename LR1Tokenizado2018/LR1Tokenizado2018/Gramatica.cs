@@ -242,7 +242,13 @@ namespace LR1Tokenizado2018
                 pasada = false;
                 foreach(Token t in noTerminales)
                 {
-                    auxPrimeroI.Add(t.getSetPrimero);//se recuperan los primeros
+                    Token aux = new Token();
+                    foreach(string s in t.getSetPrimero)
+                    {
+                        aux.getSetPrimero.Add(s);
+                    }
+                    
+                    auxPrimeroI.Add(aux.getSetPrimero);//se recuperan los primeros
                 }
                 foreach(Token t in noTerminales)//los no terminales realmente contienen las producciones
                 {       
@@ -250,10 +256,14 @@ namespace LR1Tokenizado2018
                     {
                         if (t0[0].getSetNoTerminal)//checamos el primer elemento si es No terminal
                         {
-                            foreach(string s in t0[0].getSetPrimero)//si tenemos A->B primero de A es primero B 
+                            Token auxiliarToken = buscaToken(noTerminales, t0[0].getSetSimbolo);
+                            foreach (string s in auxiliarToken.getSetPrimero)//si tenemos A->B primero de A es primero B 
                             {
                                 if (!t.getSetPrimero.Contains(s))
+                                {
                                     t.getSetPrimero.Add(s);
+                                    t0[0].getSetPrimero.Add(s);
+                                }
                             }
 
                         }
@@ -265,10 +275,41 @@ namespace LR1Tokenizado2018
                     }
                 }
 
+                foreach (Token t in noTerminales)
+                {
+                    Token aux = new Token();
+                    foreach (string s in t.getSetPrimero)
+                    {
+                        aux.getSetPrimero.Add(s);
+                    }
 
+                    auxPrimeroF.Add(aux.getSetPrimero);//se recuperan los primeros
+                   // auxPrimeroF.Add(t.getSetPrimero);//se recuperan los primeros
+                }
 
+                for(int i=0;i<auxPrimeroI.Count;i++)
+                {
+                    if (!auxPrimeroI[i].SequenceEqual(auxPrimeroF[i]))
+                    {
+                        pasada = true;
+                    }
+                }
+                auxPrimeroI.Clear();
+                auxPrimeroF.Clear();
             } while (pasada);
 
+        }
+
+        public Token buscaToken(List<Token>unaListaToken,string unSimbolo)
+        {
+            foreach (Token t in unaListaToken)
+            {
+                if (t.getSetSimbolo == unSimbolo)
+                {
+                    return t;
+                }
+            }
+            return null;
         }
     }
 }

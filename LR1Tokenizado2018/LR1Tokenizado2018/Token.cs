@@ -18,6 +18,7 @@ namespace LR1Tokenizado2018
             noTerminal = false;//valor por default
             listaProducciones = new List<List<Token>>();
         }
+        
         public List<List<Token>> getSetListaProducciones
         {
             get { return listaProducciones; }

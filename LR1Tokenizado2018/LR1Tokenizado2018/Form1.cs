@@ -36,7 +36,7 @@ namespace LR1Tokenizado2018
 
             gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
             visualizaNTyT();
-
+            gramatica.primero();
 
         }
         private void lR1ToolStripMenuItem_Click(object sender, EventArgs e)
