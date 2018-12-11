@@ -35,7 +35,7 @@ namespace LR1Tokenizado2018
             }
 
             gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
-
+            visualizaNTyT();
 
 
         }
@@ -49,5 +49,21 @@ namespace LR1Tokenizado2018
                 MessageBox.Show("Error al iniciar aplicación " + ex, "Compiladores B ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void visualizaNTyT()//Metodo que agrega a un treeview la lista de nt y t
+        {
+            treeViewNTT.Nodes.Add("No Terminales");
+            for (int i = 0; i < gramatica.getSetNoTerminales.Count; i++)
+            {
+                treeViewNTT.Nodes[0].Nodes.Add(gramatica.getSetNoTerminales[i].getSetSimbolo);
+            }
+            treeViewNTT.Nodes.Add("Terminales");
+            for (int i = 0; i < gramatica.getSetTerminales.Count; i++)
+            {
+                treeViewNTT.Nodes[1].Nodes.Add(gramatica.getSetTerminales[i].getSetSimbolo);
+            }
+        }
+
+
     }
 }

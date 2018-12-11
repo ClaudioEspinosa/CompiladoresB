@@ -11,7 +11,10 @@ namespace LR1Tokenizado2018
     {
         private List<string> listaRenglones;
         private List<Produccion> listaProducciones;
-        private List<Token> noTerminales;
+        private List<Token> noTerminales;///<Lista de elementos no terminales de la gramática
+        private List<Token> terminales;///<Lista de elementos terminales de a gramática
+
+        private List<Token> listaElemGramaticales;
         public Gramatica(List<string> unaListaRenglones)
         {
             init(unaListaRenglones);
@@ -27,6 +30,7 @@ namespace LR1Tokenizado2018
             listaRenglones = unaListaRenglones;
             listaProducciones = new List<Produccion>();
             noTerminales = new List<Token>();
+            terminales = new List<Token>();
             obtenProducciones(unaListaRenglones);
         }
         /**
@@ -59,13 +63,14 @@ namespace LR1Tokenizado2018
                  //   noTerminales.Add(izq);//la parte izquierda siempre es el NT entonces lo agregamos a la lista de NT'S
                 
             }
-            clasificaTokensIzq();
+            clasificaTokensDer();
         }
         /**
          * @brief Método para clasificar como NT o T los tokens del lado derecho de las producciones
          * **/
-        public void clasificaTokensIzq()
+        public void clasificaTokensDer()
         {
+            listaElemGramaticales = new List<Token>();
             string[] auxSplitEspacios;
             
             for (int i = 0; i < listaProducciones.Count; i++)
@@ -77,20 +82,44 @@ namespace LR1Tokenizado2018
                     {
                         Token nuevo = new Token();
                         nuevo.getSetSimbolo = auxSplitEspacios[ij];
-                        nuevo.getSetNoTerminal = true;
+                        nuevo.getSetNoTerminal = true;//se marca que es no terminal
                         listaProducciones[i].getSetladoDer.Add(nuevo);
+                        if (!containsListaToken(listaElemGramaticales, nuevo.getSetSimbolo))
+                            listaElemGramaticales.Add(nuevo);//se agrega a la lista de elementos gramaticales
+
                     }
                     else
                     {
                         Token nuevo = new Token();
                         nuevo.getSetSimbolo = auxSplitEspacios[ij];//solo agregamos el simbolo porque por default se marca como terminal
                         listaProducciones[i].getSetladoDer.Add(nuevo);
+                        if (!containsListaToken(listaElemGramaticales, nuevo.getSetSimbolo))
+                            listaElemGramaticales.Add(nuevo);
+                        if (!containsListaToken(terminales, nuevo.getSetSimbolo))
+                            terminales.Add(nuevo);
                     }
                    
                 }
             }
             generaProducNoTerminales();
         }
+        /**
+         * @brief Método que verifica la existencia de un token en una lista de tokens, no se hace con el contains normal ya que no identifica los tokens
+         * @return retorna true cuando el token ya se encuentra en la lista
+         * **/
+        public bool containsListaToken(List<Token> unaListaToken,string unSimbolo)
+        {
+            foreach(Token t in unaListaToken)
+            {
+                if (t.getSetSimbolo == unSimbolo)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /**
          * @brief Método que verifica si un token pertenece al conjunto de los No Terminales
          * @param cadToken Párametro que representa un token
@@ -173,8 +202,29 @@ namespace LR1Tokenizado2018
             }
         }
 
+     /*-----------------------------------Seccion de gets y sets------------------------------------------------*/
+     public List<Token> getSetElemGramaticales
+        {
+            get { return listaElemGramaticales; }
+            set { listaElemGramaticales =  value; }
+        }
 
+        public List<Token> getSetTerminales
+        {
 
+            get { return terminales; }
+            set { terminales = value; }
+        }
+        public List<Token> getSetNoTerminales
+        {
 
+            get { return noTerminales; }
+            set { noTerminales = value; }
+        }
+        public List<Produccion> getListaProducciones
+        {
+            get { return listaProducciones; }
+            set { listaProducciones = value; }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LR1Tokenizado2018
 {
+    //falta ver si la produccion tiene | 
     class Produccion
     {
         Token ladoIzq;///<Solo se tiene un Token del lado izquierdo por ser libre de contexto

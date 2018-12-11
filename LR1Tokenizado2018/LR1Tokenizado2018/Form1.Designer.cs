@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.algoritmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lR1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.treeViewNTT = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,15 +57,34 @@
             // lR1ToolStripMenuItem
             // 
             this.lR1ToolStripMenuItem.Name = "lR1ToolStripMenuItem";
-            this.lR1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lR1ToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.lR1ToolStripMenuItem.Text = "LR1";
             this.lR1ToolStripMenuItem.Click += new System.EventHandler(this.lR1ToolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(587, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(182, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Listas de Terminales y No Terminales";
+            // 
+            // treeViewNTT
+            // 
+            this.treeViewNTT.Location = new System.Drawing.Point(589, 63);
+            this.treeViewNTT.Name = "treeViewNTT";
+            this.treeViewNTT.Size = new System.Drawing.Size(199, 264);
+            this.treeViewNTT.TabIndex = 7;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.treeViewNTT);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -80,6 +101,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem algoritmosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lR1ToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TreeView treeViewNTT;
     }
 }
 
