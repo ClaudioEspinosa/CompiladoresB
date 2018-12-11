@@ -13,7 +13,7 @@ namespace LR1Tokenizado2018
         private List<Produccion> listaProducciones;
         private List<Token> noTerminales;///<Lista de elementos no terminales de la gramática
         private List<Token> terminales;///<Lista de elementos terminales de a gramática
-
+        private const Char epsilon = '~';///<Simboliza la cadena vácia 
         private List<Token> listaElemGramaticales;
         public Gramatica(List<string> unaListaRenglones)
         {
@@ -225,6 +225,50 @@ namespace LR1Tokenizado2018
         {
             get { return listaProducciones; }
             set { listaProducciones = value; }
+        }
+
+    //-----------------------------------------------------------------------------------------------------//
+    /**
+     * @brief Método que ejecuta el algoritmo de primeros
+     * **/
+    public void primero()
+        {
+            bool pasada = false;
+           List< List<string>> auxPrimeroI=new List<List<string>>();//lista que se le asignan los primeros iniciales
+           List<List<string>> auxPrimeroF = new List<List<string>>();//lista que se compara con los primeros iniciales y se ve si existe cambio
+
+            do
+            {
+                pasada = false;
+                foreach(Token t in noTerminales)
+                {
+                    auxPrimeroI.Add(t.getSetPrimero);//se recuperan los primeros
+                }
+                foreach(Token t in noTerminales)//los no terminales realmente contienen las producciones
+                {       
+                    foreach(List<Token> t0 in t.getSetListaProducciones)//lista de produciones de cada no terminal
+                    {
+                        if (t0[0].getSetNoTerminal)//checamos el primer elemento si es No terminal
+                        {
+                            foreach(string s in t0[0].getSetPrimero)//si tenemos A->B primero de A es primero B 
+                            {
+                                if (!t.getSetPrimero.Contains(s))
+                                    t.getSetPrimero.Add(s);
+                            }
+
+                        }
+                        else//si el primero es un T  caso A->xB donde primero de A es x
+                        {
+                            if (!t.getSetPrimero.Contains(t0[0].getSetSimbolo))
+                                t.getSetPrimero.Add(t0[0].getSetSimbolo);
+                        }
+                    }
+                }
+
+
+
+            } while (pasada);
+
         }
     }
 }
