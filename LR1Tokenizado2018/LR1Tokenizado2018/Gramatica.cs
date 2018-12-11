@@ -44,10 +44,10 @@ namespace LR1Tokenizado2018
                auxSplit=splitClaudiano(s);
                 Produccion nueva = new Produccion();
                 Token izq=new Token();
-                izq.getSetSimbolo = auxSplit[0];
-                izq.getSetTerminal = true;
+                izq.getSetSimbolo = auxSplit[0].Trim();
+                izq.getSetNoTerminal = true;
                 //hasta aqui sabemos que el lado izquierdo debe de ser un token, el lado derecho puede ser uno o más asi que mas adelante se separaran hasta ahora se guardara la cadena del lado derecho
-                listaProducciones.Add(new Produccion(izq, auxSplit[1]));
+                listaProducciones.Add(new Produccion(izq, auxSplit[1].Trim()));
                 foreach(Token t in noTerminales)
                 {
                     if (t.getSetSimbolo == izq.getSetSimbolo)
@@ -59,6 +59,7 @@ namespace LR1Tokenizado2018
                  //   noTerminales.Add(izq);//la parte izquierda siempre es el NT entonces lo agregamos a la lista de NT'S
                 
             }
+            clasificaTokensIzq();
         }
         /**
          * @brief Método para clasificar como NT o T los tokens del lado derecho de las producciones
@@ -66,7 +67,8 @@ namespace LR1Tokenizado2018
         public void clasificaTokensIzq()
         {
             string[] auxSplitEspacios;
-            for(int i = 0; i < listaProducciones.Count; i++)
+            
+            for (int i = 0; i < listaProducciones.Count; i++)
             {
                 auxSplitEspacios = listaProducciones[i].getSetStringladoDer.Split(' ');
                 for (int ij = 0; ij < auxSplitEspacios.Length; ij++)//por cada cadena separa por espacio, debemos de hacer clasificacion
@@ -75,17 +77,25 @@ namespace LR1Tokenizado2018
                     {
                         Token nuevo = new Token();
                         nuevo.getSetSimbolo = auxSplitEspacios[ij];
-                        nuevo.getSetTerminal = true;
+                        nuevo.getSetNoTerminal = true;
+                        listaProducciones[i].getSetladoDer.Add(nuevo);
                     }
                     else
                     {
                         Token nuevo = new Token();
-                        nuevo.getSetSimbolo = auxSplitEspacios[ij];
+                        nuevo.getSetSimbolo = auxSplitEspacios[ij];//solo agregamos el simbolo porque por default se marca como terminal
+                        listaProducciones[i].getSetladoDer.Add(nuevo);
                     }
+                   
                 }
             }
+            generaProducNoTerminales();
         }
-
+        /**
+         * @brief Método que verifica si un token pertenece al conjunto de los No Terminales
+         * @param cadToken Párametro que representa un token
+         * return Retorna verdadero cuando el token pertenece a los no terminales
+         * */
         public bool checaNoTerminal(string cadToken)
         {
             bool res = false;
@@ -134,5 +144,37 @@ namespace LR1Tokenizado2018
                 return null;
             }
         }
+        /**
+         * @brief Método que generará en la lista de no terminales, la lista de producciones, es decir un no terminal puede tner varias producciones asociadas
+         * 
+         * **/
+        public void generaProducNoTerminales()
+        {
+            try
+            {
+                for (int i = 0; i < noTerminales.Count; i++)//aqui se hace el ciclo para los no terminales
+                {
+                    for (int j = 0; j < listaProducciones.Count; j++)
+                    {
+                        if (listaProducciones[j].getSetladoIzq.getSetSimbolo == noTerminales[i].getSetSimbolo)
+                        {
+                            if (!listaProducciones[j].getSetVisitado)//si no ha sido visitado 
+                            {
+                                noTerminales[i].getSetListaProducciones.Add(listaProducciones[j].getSetladoDer);
+                                listaProducciones[j].getSetVisitado = true;
+
+                            }
+                        }
+                    }
+                }
+            }catch(Exception e)
+            {
+                MessageBox.Show("Error Generando Listas NT " + e, "Compiladores B", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
     }
 }
