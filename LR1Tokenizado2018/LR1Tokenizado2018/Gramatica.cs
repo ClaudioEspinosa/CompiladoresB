@@ -243,6 +243,7 @@ namespace LR1Tokenizado2018
                 foreach(Token t in noTerminales)
                 {
                     Token aux = new Token();
+                   
                     foreach(string s in t.getSetPrimero)
                     {
                         aux.getSetPrimero.Add(s);
