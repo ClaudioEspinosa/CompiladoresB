@@ -12,11 +12,13 @@ namespace LR1Tokenizado2018
         private bool noTerminal;///<Bandera para saber si el simbolo es terminal o no
         private List<List<Token>> listaProducciones;///<Variable para manejar las diferentes producciones que puede manejar un simbolo, en caso de ser no terminal
         private List<string> primero;
+        private bool analizador;
         public Token()
         {
             primero = new List<string>();
             noTerminal = false;//valor por default
             listaProducciones = new List<List<Token>>();
+            analizador = false;//tiene la misma funcion que el analizador ¬
         }
         
         public List<List<Token>> getSetListaProducciones
@@ -38,6 +40,11 @@ namespace LR1Tokenizado2018
         {
             get { return primero; }
             set { primero = value; }
+        }
+        public bool getSetAnalizador
+        {
+            get { return analizador; }
+            set { analizador = true; }
         }
     }
 }

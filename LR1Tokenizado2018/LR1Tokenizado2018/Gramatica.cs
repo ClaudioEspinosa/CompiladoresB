@@ -12,6 +12,7 @@ namespace LR1Tokenizado2018
         private List<string> listaRenglones;
         private List<Produccion> listaProducciones;
         private List<Token> noTerminales;///<Lista de elementos no terminales de la gramática
+       
         private List<Token> terminales;///<Lista de elementos terminales de a gramática
         private const Char epsilon = '~';///<Simboliza la cadena vácia 
         private List<Token> listaElemGramaticales;
@@ -46,7 +47,8 @@ namespace LR1Tokenizado2018
             {
                 loContiene = false;
                auxSplit=splitClaudiano(s);
-                Produccion nueva = new Produccion();
+
+                //Produccion nueva = new Produccion();
                 Token izq=new Token();
                 izq.getSetSimbolo = auxSplit[0].Trim();
                 izq.getSetNoTerminal = true;
@@ -63,6 +65,13 @@ namespace LR1Tokenizado2018
                  //   noTerminales.Add(izq);//la parte izquierda siempre es el NT entonces lo agregamos a la lista de NT'S
                 
             }
+            Token izqAum = new Token();
+            izqAum.getSetSimbolo = listaProducciones[0].getSetladoIzq.getSetSimbolo + "'";
+            izqAum.getSetNoTerminal = true;
+            listaProducciones.Insert(0, new Produccion(izqAum, listaProducciones[0].getSetladoIzq.getSetSimbolo));//aumento de la gramática
+                
+
+
             clasificaTokensDer();
         }
         /**
@@ -301,7 +310,11 @@ namespace LR1Tokenizado2018
 
         }
 
-        public Token buscaToken(List<Token>unaListaToken,string unSimbolo)
+        /**
+         * @brief Método que busca un token en una lista y lo retorna
+         * @return retorna un token si lo encuentra y si no retorna nulo
+         * */
+    public Token buscaToken(List<Token>unaListaToken,string unSimbolo)
         {
             foreach (Token t in unaListaToken)
             {
@@ -312,5 +325,8 @@ namespace LR1Tokenizado2018
             }
             return null;
         }
+
+       
+
     }
 }
