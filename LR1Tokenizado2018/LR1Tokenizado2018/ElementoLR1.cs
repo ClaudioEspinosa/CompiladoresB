@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LR1Tokenizado2018
 {
@@ -10,22 +11,51 @@ namespace LR1Tokenizado2018
     {
         private string simbolo;///<Es la cadena que representa al token (identificador)
         private bool noTerminal;///<Bandera para saber si el simbolo es terminal o no
-        private List<List<Token>> listaProducciones;///<Variable para manejar las diferentes producciones que puede manejar un simbolo, en caso de ser no terminal
+        private List<Token> produccion;///<Variable para manejar las diferentes producciones que puede manejar un simbolo, en caso de ser no terminal
         private List<string> primero;
         private Token be;
         private Token beta;
         private bool analizado;///<variable para indicar que el elemento ya termino de analizar
+      
         private List<string> cAdelanto;
         public ElementoLR1()
         {
             analizado = false;
         }
 
-       public ElementoLR1(string unSimbolo, List<List<Token>> unaListaProducciones,List<string>unCadelanto)
+       public ElementoLR1(string unSimbolo, List<Token> unaListaProducciones,List<string>unCadelanto)
         {
             simbolo = unSimbolo;
-            listaProducciones = unaListaProducciones;
+            produccion = unaListaProducciones;
             cAdelanto = unCadelanto;
+            analizado = false;
+
+        }
+        public ElementoLR1(ElementoLR1 unElemento)
+        {
+            simbolo = unElemento.getSetSimbolo;
+            produccion = unElemento.getSetListaProduccion;
+            primero = unElemento.getSetPrimero;
+            analizado = unElemento.getSetAnalizado;
+            noTerminal = unElemento.getSetnoTerminal;
+        }
+        /**
+         * @brief Método que pone en false el analizador de todos los tokens que llegan como parametro
+         * **/
+        public void retornaAnalizador()
+        {
+            if (produccion != null)
+            {
+                foreach (Token t in produccion)
+                {
+                    t.getSetAnalizador = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error al retornar analizador, funcion llamada en un momento erroneo verifique en que momento llama a la funcion ");
+            }
+
         }
 
         ///--------------------Gets y Sets----------------------------------------///
@@ -64,6 +94,12 @@ namespace LR1Tokenizado2018
         {
             get { return cAdelanto; }
             set { cAdelanto = value; }
+        }
+       
+        public List<Token> getSetListaProduccion
+        {
+            get { return produccion; }
+            set { produccion = value; }
         }
     }
 }

@@ -15,9 +15,11 @@ namespace LR1Tokenizado2018
         string cadAbrir = "";///< representa a la cadena que se abrira, todo el archivo se lee primero como una cadena grande, despues de debe separar por renglones
         string[] renglonesArch;///< representa los renglones del archivo de la grámatica 
         Gramatica gramatica;
+        LR1 lr1;
         public Form1()
         {
             InitializeComponent();
+            
                 
         }
         /**
@@ -25,18 +27,25 @@ namespace LR1Tokenizado2018
          **/
         public void abrir()
         {
-            //el archivo se llama g4 por el nombre que le da antlr a sus grámaticas
-            cadAbrir = System.IO.File.ReadAllText("G4.txt");
-            renglonesArch = cadAbrir.Split('\r');//se hace un split por renglon
-            for (int i = 0; i < renglonesArch.Length; i++)
+            try
             {
-                if (renglonesArch[i].Contains('\n'))
-                    renglonesArch[i] = renglonesArch[i].Trim('\n');//se quitan los caracteres \n, no se imprimen pero hacen ruido al analizar la cadena
-            }
+                //el archivo se llama g4 por el nombre que le da antlr a sus grámaticas
+                cadAbrir = System.IO.File.ReadAllText("G4.txt");
+                renglonesArch = cadAbrir.Split('\r');//se hace un split por renglon
+                for (int i = 0; i < renglonesArch.Length; i++)
+                {
+                    if (renglonesArch[i].Contains('\n'))
+                        renglonesArch[i] = renglonesArch[i].Trim('\n');//se quitan los caracteres \n, no se imprimen pero hacen ruido al analizar la cadena
+                }
 
-            gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
-            visualizaNTyT();
-            gramatica.primero();
+                gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
+                visualizaNTyT();
+                gramatica.primero();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en la funcion abrir " + ex, "Compiladores B ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private void lR1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -44,7 +53,9 @@ namespace LR1Tokenizado2018
             try
             {
                 abrir();
-            }catch(Exception ex)
+                lr1 = new LR1(gramatica);
+            }
+            catch(Exception ex)
             {
                 MessageBox.Show("Error al iniciar aplicación " + ex, "Compiladores B ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

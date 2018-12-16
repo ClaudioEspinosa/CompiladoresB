@@ -40,15 +40,21 @@ namespace LR1Tokenizado2018
          * **/
         public void obtenProducciones(List<string>unaListaProducciones)
         {
+            List<string> lProducciones = unaListaProducciones;
+
             string[] auxSplit;//guarda el resultado del split claudiano
             bool loContiene = false;
 
-            foreach(string s in unaListaProducciones)
+            auxSplit = splitClaudiano(lProducciones[0]);
+
+            lProducciones.Insert(0,auxSplit[0].Trim()+"'"+"->"+ auxSplit[0].Trim());//aumento de la gramática
+            foreach (string s in lProducciones)
             {
                 loContiene = false;
                auxSplit=splitClaudiano(s);
 
                 //Produccion nueva = new Produccion();
+
                 Token izq=new Token();
                 izq.getSetSimbolo = auxSplit[0].Trim();
                 izq.getSetNoTerminal = true;
@@ -65,10 +71,7 @@ namespace LR1Tokenizado2018
                  //   noTerminales.Add(izq);//la parte izquierda siempre es el NT entonces lo agregamos a la lista de NT'S
                 
             }
-            Token izqAum = new Token();
-            izqAum.getSetSimbolo = listaProducciones[0].getSetladoIzq.getSetSimbolo + "'";
-            izqAum.getSetNoTerminal = true;
-            listaProducciones.Insert(0, new Produccion(izqAum, listaProducciones[0].getSetladoIzq.getSetSimbolo));//aumento de la gramática
+            
                 
 
 
@@ -79,7 +82,7 @@ namespace LR1Tokenizado2018
          * **/
         public void clasificaTokensDer()
         {
-            listaElemGramaticales = new List<Token>();
+            
             string[] auxSplitEspacios;
             
             for (int i = 0; i < listaProducciones.Count; i++)
@@ -93,8 +96,8 @@ namespace LR1Tokenizado2018
                         nuevo.getSetSimbolo = auxSplitEspacios[ij];
                         nuevo.getSetNoTerminal = true;//se marca que es no terminal
                         listaProducciones[i].getSetladoDer.Add(nuevo);
-                        if (!containsListaToken(listaElemGramaticales, nuevo.getSetSimbolo))
-                            listaElemGramaticales.Add(nuevo);//se agrega a la lista de elementos gramaticales
+                        
+                          
 
                     }
                     else
@@ -102,8 +105,7 @@ namespace LR1Tokenizado2018
                         Token nuevo = new Token();
                         nuevo.getSetSimbolo = auxSplitEspacios[ij];//solo agregamos el simbolo porque por default se marca como terminal
                         listaProducciones[i].getSetladoDer.Add(nuevo);
-                        if (!containsListaToken(listaElemGramaticales, nuevo.getSetSimbolo))
-                            listaElemGramaticales.Add(nuevo);
+                        
                         if (!containsListaToken(terminales, nuevo.getSetSimbolo))
                             terminales.Add(nuevo);
                     }
@@ -111,6 +113,25 @@ namespace LR1Tokenizado2018
                 }
             }
             generaProducNoTerminales();
+            generaElementosGramaticales();
+        }
+        public void generaElementosGramaticales()
+        {
+            listaElemGramaticales = new List<Token>();
+            foreach (Token t in noTerminales)
+            {
+                if (!containsListaToken(listaElemGramaticales, t.getSetSimbolo))
+                {
+                    listaElemGramaticales.Add(t);
+                }
+            }
+            foreach(Token t in terminales)
+            {
+                if (!containsListaToken(listaElemGramaticales, t.getSetSimbolo))
+                {
+                    listaElemGramaticales.Add(t);
+                }
+            }
         }
         /**
          * @brief Método que verifica la existencia de un token en una lista de tokens, no se hace con el contains normal ya que no identifica los tokens
