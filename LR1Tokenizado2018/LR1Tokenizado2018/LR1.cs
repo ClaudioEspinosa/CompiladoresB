@@ -22,6 +22,7 @@ namespace LR1Tokenizado2018
             gramatica = unaGramatica;//llega la gramatica con los primeros calculados
             generaElementosIniciales();
             transicionesLr1 = new List<String>();
+            listEstadosLR1 = new List<EdoLR1>();
 
         }
         public void generaElementosIniciales()
@@ -91,7 +92,7 @@ namespace LR1Tokenizado2018
                                 }
                                 else
                                 {
-                                    ElementoLR1 nuevo = new ElementoLR1(aBB[0].getSetSimbolo, t, auxEdo.getSetListElementos[i].getSetPrimero);
+                                    ElementoLR1 nuevo = new ElementoLR1(aBB[0].getSetSimbolo, t, auxEdo.getSetListElementos[i].getSetLadocAdelanto);
                                     nuevo.retornaAnalizador();
                                     if (!contieneEdoElemento(auxEdo, nuevo))
                                         auxEdo.getSetListElementos.Add(nuevo);
@@ -168,17 +169,25 @@ namespace LR1Tokenizado2018
 
             foreach(ElementoLR1 elem in unEdo.getSetListElementos)
             {
+                res = true;
                 if (elem.getSetSimbolo == unElemento.getSetSimbolo)
                 {
-                    foreach(Token t1 in elem.getSetListaProduccion)
+                    if (elem.getSetListaProduccion.Count == unElemento.getSetListaProduccion.Count)
                     {
-                        foreach(Token t2 in unElemento.getSetListaProduccion)
+                        foreach (Token t1 in elem.getSetListaProduccion)
                         {
-                            if (t1.getSetSimbolo != t2.getSetSimbolo)
-                                return false;
+                            foreach (Token t2 in unElemento.getSetListaProduccion)
+                            {
+                                if (t1.getSetSimbolo != t2.getSetSimbolo)
+                                    res = false;
+                            }
                         }
                     }
+                    else
+                        res = false;
                 }
+                else
+                    res = false;
             }
 
             return res;

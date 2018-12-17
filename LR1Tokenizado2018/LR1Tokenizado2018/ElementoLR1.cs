@@ -50,9 +50,10 @@ namespace LR1Tokenizado2018
         {
             if (produccion != null)
             {
-                foreach (Token t in produccion)
+                foreach (Token t in produccion)//aqui sucede que si la bandera es falsa y le asigno falso se vuelve verdadera wtf!!!
                 {
-                    t.getSetAnalizador = false;
+                    if (t.getSetAnalizador)//si es true, lo pasa al false
+                      t.getSetAnalizador = false;
                 }
             }
             else
