@@ -49,6 +49,8 @@ namespace LR1Tokenizado2018
 
                     }
                 }
+                if (listElemIniciales.Count > 0)
+                    listElemIniciales[0].getSetLadocAdelanto.Add("$");//se pone el primer caracter de adelanto s'->s,$
             }
 
         }
@@ -154,6 +156,10 @@ namespace LR1Tokenizado2018
             EdoLR1 c;
             EdoLR1 primerEdo = new EdoLR1();
             EdoLR1 auxIR_A;
+
+            primerEdo.getSetListElementos.Add(listElemIniciales[0]);//SE INICIA EL ESTADO CON LA PRIMERA PRODUCCION
+            c = cerradura(primerEdo);
+            listEstadosLR1.Add(c);
 
         }
         public bool contieneEdoElemento(EdoLR1 unEdo,ElementoLR1 unElemento)

@@ -54,6 +54,7 @@ namespace LR1Tokenizado2018
             {
                 abrir();
                 lr1 = new LR1(gramatica);
+                lr1.elementos();
             }
             catch(Exception ex)
             {
