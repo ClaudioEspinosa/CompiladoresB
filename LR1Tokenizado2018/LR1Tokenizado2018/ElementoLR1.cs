@@ -21,6 +21,9 @@ namespace LR1Tokenizado2018
         public ElementoLR1()
         {
             analizado = false;
+            produccion = new List<Token>();
+            cAdelanto = new List<string>();
+
         }
 
        public ElementoLR1(string unSimbolo, List<Token> unaListaProducciones,List<string>unCadelanto)
@@ -38,6 +41,7 @@ namespace LR1Tokenizado2018
             primero = unElemento.getSetPrimero;
             analizado = unElemento.getSetAnalizado;
             noTerminal = unElemento.getSetnoTerminal;
+            cAdelanto = unElemento.getSetLadocAdelanto;
         }
         /**
          * @brief Método que pone en false el analizador de todos los tokens que llegan como parametro

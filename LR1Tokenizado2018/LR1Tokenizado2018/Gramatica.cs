@@ -97,6 +97,7 @@ namespace LR1Tokenizado2018
                         nuevo.getSetNoTerminal = true;//se marca que es no terminal
                         listaProducciones[i].getSetladoDer.Add(nuevo);
                         
+                        //creo es en nuevo.getSetListProducciones
                           
 
                     }

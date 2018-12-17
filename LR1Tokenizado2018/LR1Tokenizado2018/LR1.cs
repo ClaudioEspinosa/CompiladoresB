@@ -196,11 +196,11 @@ namespace LR1Tokenizado2018
                 {
                     if (cadSeparar[i].getSetNoTerminal)//si es no terminal, entonces es la parte be
                     {
-                        res.Add (cadSeparar[i]);
+                        res.Add(retornaTokenInicial(cadSeparar[i]));
                         i++;
                         if (i < cadSeparar.Count)
                         {
-                            res.Add(cadSeparar[i]);//este seria beta
+                            res.Add(retornaTokenInicial(cadSeparar[i]));//este seria beta
                         }
                         else
                         {
@@ -215,6 +215,17 @@ namespace LR1Tokenizado2018
 
             return res;
 
+
+        }
+
+        public Token retornaTokenInicial(Token unToken)
+        {
+            foreach(Token t in gramatica.getSetNoTerminales)
+            {
+                if (t.getSetSimbolo == unToken.getSetSimbolo)
+                    return t;
+            }
+            return null;
 
         }
     }
