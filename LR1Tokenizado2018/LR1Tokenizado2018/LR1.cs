@@ -17,6 +17,7 @@ namespace LR1Tokenizado2018
         private List<EdoLR1> listEstadosLR1;///<Estados del AFD de análisis sintáctico LR1
         private List<ElementoLR1> listElemIniciales;
         private List<String> transicionesLr1;///< Transiciones del AFD
+
         public LR1(Gramatica unaGramatica)
         {
             gramatica = unaGramatica;//llega la gramatica con los primeros calculados
@@ -157,11 +158,135 @@ namespace LR1Tokenizado2018
             EdoLR1 c;
             EdoLR1 primerEdo = new EdoLR1();
             EdoLR1 auxIR_A;
+            string auxTransicion = "";//para formar la cadena de transicion que se guarda en una lista d strings
+            //el formato es edo1-edo1-simbolo para asi hacer un split con - y separarlo 
 
             primerEdo.getSetListElementos.Add(listElemIniciales[0]);//SE INICIA EL ESTADO CON LA PRIMERA PRODUCCION
             c = cerradura(primerEdo);
             listEstadosLR1.Add(c);
 
+            for(int i = 0; i < listEstadosLR1.Count; i++)//por cada conjunto de elementos I en C 
+            {
+                foreach(Token X in gramatica.getSetElemGramaticales)//por cada simbolo gramatical X
+                {
+                    auxIR_A = ir_A(listEstadosLR1[i].getSetListElementos, X);
+                    if(auxIR_A!=null&& !contieneEstado(listEstadosLR1, auxIR_A))
+                    {
+                        if (X.getSetNoTerminal)
+                        {
+                            auxTransicion = i + "°" +   X.getSetSimbolo + "°";//indicamos que es un desplazamiento
+                            listEstadosLR1.Add(auxIR_A);//se agrega el ir a
+                            auxTransicion += listEstadosLR1.Count - 1;//esto es porque es el estado siguiente, tam de lista de edos lr1 -1
+                            transicionesLr1.Add(auxTransicion);
+                            auxTransicion = "";
+                        }
+                        else
+                        {
+                            auxTransicion = i + "°" + X.getSetSimbolo + "°";
+                            listEstadosLR1.Add(auxIR_A);
+                            if (listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Contains('r'))                           
+                            {
+                                listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion = listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Replace('r', 's');
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+        /***
+     * @brief Método que retorna el indice de un  estado, si este se encuentra en una lista de estados
+     * @param estados Lista de estados donde se buscará
+     * @param unEstado Estado a buscar
+     * @return indice
+     * */
+        public int getIniceEstado(List<EdoLR1> estados, EdoLR1 unEstado)
+        {
+            int res = -1;
+
+            for (int i = 0; i < estados.Count; i++)
+            {
+                //  if(i!=indice)
+
+
+                if (comparaEstados(estados[i], unEstado))
+                    return i;
+            }
+            return res;
+        }
+        /**
+         * @brief Método para verificar si un estado ya se encuentra en la lista de estados LR1
+         * @param listaEstados lista de estados donde se buscará
+         * @param unEdo estado a buscar 
+         * @return retorna verdadero si el elemento ya se encuentra dentro del estado
+         * **/
+        public bool contieneEstado(List<EdoLR1> listaEstados,EdoLR1 unEdo)
+        {   
+            bool res = false;
+            for (int i = 0; i < listaEstados.Count; i++)
+            {
+                //  if(i!=indice)
+                res = comparaEstados(listaEstados[i], unEdo);
+
+                if (res)
+                    break;
+            }
+
+            return res;
+        }
+        public bool comparaEstados(EdoLR1 estado1, EdoLR1 estado2)
+        {
+            bool res = false;
+            int contador = 0;//para ver si todos los elementos son iguales
+            if (estado1.getSetListElementos.Count == estado2.getSetListElementos.Count)//para empezar deben de tener el mismo numero de elementos
+            {
+                foreach (ElementoLR1 elemento1 in estado1.getSetListElementos)
+                {
+                    foreach (ElementoLR1 elemento2 in estado2.getSetListElementos)
+                    {
+                        if (comparaElementosLR1(elemento1, elemento2))
+                        {
+                            contador++;
+
+                        }
+
+                    }
+                }
+                if (contador == estado1.getSetListElementos.Count)
+                    res = true;//se compara si el numero de veces que los elementos fueron iguales es la misma cantidad de elementos entonces los objetos son iguales 
+                               //solo tienen los elementos en otro orden
+            }
+            return res;
+        }
+        public bool comparaElementosLR1(ElementoLR1 elem1,ElementoLR1 elem2)
+        {
+            bool res = true;
+
+            if (elem1.getSetSimbolo == elem2.getSetSimbolo)// se compara si tienen el mismo simbolo
+            {
+                foreach(Token t in elem1.getSetListaProduccion)
+                {
+                    foreach(Token t1 in elem2.getSetListaProduccion)
+                    {
+                        if(t.getSetSimbolo!=elem2.getSetSimbolo)
+                        {
+                            return false;
+                        }
+                            
+                    }
+                }
+                foreach(string primElement1 in elem1.getSetLadocAdelanto)
+                {
+                    foreach(string primElement2 in elem2.getSetLadocAdelanto)
+                    {
+                        if (primElement1 != primElement2)//los caracteres de adelanto deben de ser iguales, si no es un elemento distinto
+                            return false;
+                    }
+                }
+            }
+
+            return res;
         }
         public bool contieneEdoElemento(EdoLR1 unEdo,ElementoLR1 unElemento)
         {
@@ -236,6 +361,10 @@ namespace LR1Tokenizado2018
             }
             return null;
 
+        }
+        public List<EdoLR1> getListaEstadosLr1 //metodo que regresa al form la lista par visualizarla en el form
+        {
+            get { return listEstadosLR1; }
         }
     }
 }
