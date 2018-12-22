@@ -135,11 +135,16 @@ namespace LR1Tokenizado2018
                     for (int j = 0; j < recorreP.getSetListaProduccion.Count; j++)
                     {
 
-                        if (!recorreP.getSetListaProduccion[j].getSetAnalizador&&recorreP.getSetListaProduccion[j].getSetSimbolo==X.getSetSimbolo)
+                        if (!recorreP.getSetListaProduccion[j].getSetAnalizador)
                         {
-                            recorreP.getSetListaProduccion[j].getSetAnalizador = true;
-                            J.getSetListElementos.Add(recorreP);
-                            entro = true;
+                            if (recorreP.getSetListaProduccion[j].getSetSimbolo == X.getSetSimbolo)
+                            {
+                                recorreP.getSetListaProduccion[j].getSetAnalizador = true;
+                                J.getSetListElementos.Add(recorreP);
+                                entro = true;
+                            }
+                            else
+                                break;//si el analizador ya esta en esa posicion y el. simbolo no es igual entonces ya no recorro los demas 
                         }
                     }
                 }
@@ -148,7 +153,11 @@ namespace LR1Tokenizado2018
 
 
 
-            return cerradura(J);
+            ///aqui se hace la parte de return cerradura de J
+            if (entro)
+                return cerradura(J);
+            else
+                return null;
         }
         /***
       * @brief Método principal del algoritmo LR1 manda invocar los metodos cerradura e ir_A para desarrollar todo el algorimo
@@ -170,7 +179,7 @@ namespace LR1Tokenizado2018
                 foreach(Token X in gramatica.getSetElemGramaticales)//por cada simbolo gramatical X
                 {
                     auxIR_A = ir_A(listEstadosLR1[i].getSetListElementos, X);
-                    if(auxIR_A!=null&& !contieneEstado(listEstadosLR1, auxIR_A))
+                    if(auxIR_A!=null&&!contieneEstado(listEstadosLR1, auxIR_A))
                     {
                         if (X.getSetNoTerminal)
                         {
@@ -188,10 +197,28 @@ namespace LR1Tokenizado2018
                             {
                                 listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion = listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Replace('r', 's');
                             }
+                            auxTransicion += getListaEstadosLr1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion + (listEstadosLR1.Count - 1);
+                            transicionesLr1.Add(auxTransicion);
+                            auxTransicion = "";
                         }
                     }
                 }
 
+            }
+            for (int i = 0; i < listEstadosLR1.Count; i++)
+            {
+                auxTransicion = "";
+                if (listEstadosLR1[i].getSetCompleto)
+                {
+                    for (int j = 0; j < listEstadosLR1[i].getSetListElementos.Count; j++)
+                    {
+                        for (int k = 0; k < listEstadosLR1[i].getSetListElementos[j].getSetLadocAdelanto.Count; k++)
+                        {
+                            auxTransicion = i + "°" + listEstadosLR1[i].getSetListElementos[j].getSetLadocAdelanto[k] + "°" + "r" + listEstadosLR1[i].getSetIndiceReduccion.ToString();
+                            transicionesLr1.Add(auxTransicion);
+                        }
+                    }
+                }
             }
 
         }
