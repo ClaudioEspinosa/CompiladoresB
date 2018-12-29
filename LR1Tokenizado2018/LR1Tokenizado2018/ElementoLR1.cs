@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace LR1Tokenizado2018
 {
-    class ElementoLR1
+    class ElementoLR1 : ICloneable
     {
         private string simbolo;///<Es la cadena que representa al token (identificador)
         private bool noTerminal;///<Bandera para saber si el simbolo es terminal o no
@@ -29,11 +29,22 @@ namespace LR1Tokenizado2018
        public ElementoLR1(string unSimbolo, List<Token> unaListaProducciones,List<string>unCadelanto)
         {
             simbolo = unSimbolo;
-            produccion = unaListaProducciones;
+            produccion = copiaListaProduccion(unaListaProducciones);
             cAdelanto = unCadelanto;
             analizado = false;
 
         }
+        public List<Token> copiaListaProduccion(List<Token> unaLista)
+        {
+            List<Token> res = new List<Token>();
+
+            foreach (Token t in unaLista)
+            {
+                res.Add(t);
+            }
+            return res;
+        }
+       
         public ElementoLR1(ElementoLR1 unElemento)
         {
             simbolo = unElemento.getSetSimbolo;
@@ -42,6 +53,30 @@ namespace LR1Tokenizado2018
             analizado = unElemento.getSetAnalizado;
             noTerminal = unElemento.getSetnoTerminal;
             cAdelanto = unElemento.getSetLadocAdelanto;
+        }
+        public ElementoLR1(string unSimbolo,List<Token>unaProduccion,List<string>unPrimero,bool unAnalizado,bool noTerm,List<string>uncAdelanto)
+        {
+            simbolo = unSimbolo;
+            produccion = copiaListaTokens(unaProduccion);
+            primero = unPrimero;
+            analizado = unAnalizado;
+            noTerminal = noTerm;
+            cAdelanto = uncAdelanto;
+        }
+            public object Clone()
+        {
+            return new ElementoLR1(this.simbolo,this.produccion,this.primero,this.analizado,this.noTerminal,this.cAdelanto);
+        }
+        public List<Token> copiaListaTokens(List<Token>listaAcopiar)
+        {
+            List<Token> res=new List<Token>();
+
+            foreach(Token t in listaAcopiar)
+            {
+                res.Add((Token)t.Clone());
+            }
+
+            return res;
         }
         /**
          * @brief Método que pone en false el analizador de todos los tokens que llegan como parametro

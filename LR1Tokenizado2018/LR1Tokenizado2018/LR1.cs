@@ -80,10 +80,18 @@ namespace LR1Tokenizado2018
                         {
                             try
                             {
-
+                               
                                 if (aBB[1] != null)
                                 {
-                                    ElementoLR1 nuevo = new ElementoLR1(aBB[0].getSetSimbolo,t,aBB[1].getSetPrimero);
+                                    ElementoLR1 nuevo;
+                                    if (aBB[1].getSetNoTerminal)
+                                        nuevo = new ElementoLR1(aBB[0].getSetSimbolo, copiaCadTokens(t), aBB[1].getSetPrimero);
+                                    else
+                                    {
+                                        List<string> primeroTerminal = new List<string>();
+                                        primeroTerminal.Add(aBB[1].getSetSimbolo);
+                                        nuevo = new ElementoLR1(aBB[0].getSetSimbolo, copiaCadTokens(t), primeroTerminal);
+                                    }
                                     nuevo.retornaAnalizador();
                                     if (!contieneEdoElemento(auxEdo, nuevo))
                                         auxEdo.getSetListElementos.Add(nuevo);
@@ -109,9 +117,21 @@ namespace LR1Tokenizado2018
                 else
                 {
                     //retornar el false de analizado para que sevea igual que en el libro
+                    auxEdo.getSetCompleto = true;
+                   
                 }
             }
             return auxEdo;
+        }
+        public List<Token> copiaCadTokens(List<Token> listaAcopiar)
+        {
+            List<Token> res=new List<Token>();
+            foreach(Token t in listaAcopiar)
+            {
+                res.Add((Token)t.Clone());
+            }
+
+            return res;
         }
         /**
          * @brief Método IR_A del algoritmo LR1 del libro del dragon purpura pag 287, lo que hace es recorrer el punto o en este caso la bandera de analizador y retornar la cerradura de J 
@@ -131,7 +151,7 @@ namespace LR1Tokenizado2018
 
                 if (!unEstado[i].getSetAnalizado)//es decir si el elemento aun no ha sido analizado en su totalidad
                 {
-                    recorreP = new ElementoLR1(unEstado[i]);
+                    recorreP = (ElementoLR1)unEstado[i].Clone();
                     for (int j = 0; j < recorreP.getSetListaProduccion.Count; j++)
                     {
 
@@ -142,12 +162,16 @@ namespace LR1Tokenizado2018
                                 recorreP.getSetListaProduccion[j].getSetAnalizador = true;
                                 J.getSetListElementos.Add(recorreP);
                                 entro = true;
+                               
+                                break;
                             }
                             else
                                 break;//si el analizador ya esta en esa posicion y el. simbolo no es igual entonces ya no recorro los demas 
                         }
                     }
+                   // break;
                 }
+                
             }
 
 
@@ -176,34 +200,52 @@ namespace LR1Tokenizado2018
 
             for(int i = 0; i < listEstadosLR1.Count; i++)//por cada conjunto de elementos I en C 
             {
-                foreach(Token X in gramatica.getSetElemGramaticales)//por cada simbolo gramatical X
+                
+                if (!listEstadosLR1[i].getSetCompleto)
                 {
-                    auxIR_A = ir_A(listEstadosLR1[i].getSetListElementos, X);
-                    if(auxIR_A!=null&&!contieneEstado(listEstadosLR1, auxIR_A))
+                    foreach (Token X in gramatica.getSetElemGramaticales)//por cada simbolo gramatical X
                     {
-                        if (X.getSetNoTerminal)
+                        if (i == 5 && X.getSetSimbolo == "(")
                         {
-                            auxTransicion = i + "°" +   X.getSetSimbolo + "°";//indicamos que es un desplazamiento
-                            listEstadosLR1.Add(auxIR_A);//se agrega el ir a
-                            auxTransicion += listEstadosLR1.Count - 1;//esto es porque es el estado siguiente, tam de lista de edos lr1 -1
-                            transicionesLr1.Add(auxTransicion);
-                            auxTransicion = "";
+
+                        }
+                        auxIR_A = ir_A(listEstadosLR1[i].getSetListElementos, X);
+                        if (auxIR_A != null && !contieneEstado(listEstadosLR1, auxIR_A))
+                        {
+                            if (X.getSetNoTerminal)
+                            {
+                                auxTransicion = i + "°" + X.getSetSimbolo + "°";//indicamos que es un desplazamiento
+                                listEstadosLR1.Add(auxIR_A);//se agrega el ir a
+                                auxTransicion += listEstadosLR1.Count - 1;//esto es porque es el estado siguiente, tam de lista de edos lr1 -1
+                                transicionesLr1.Add(auxTransicion);
+                                auxTransicion = "";
+                            }
+                            else
+                            {
+                                auxTransicion = i + "°" + X.getSetSimbolo + "°";
+                                listEstadosLR1.Add(auxIR_A);//esta al ultimom pndejo
+                                if (listEstadosLR1.Last().getSetListAccion.Contains('r'))
+                                {
+                                    listEstadosLR1.Last().getSetListAccion = listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Replace('r', 's');
+                                }
+                                auxTransicion += listEstadosLR1.Last().getSetListAccion + (listEstadosLR1.Count - 1);
+                                transicionesLr1.Add(auxTransicion);
+                                auxTransicion = "";
+                            }
                         }
                         else
                         {
-                            auxTransicion = i + "°" + X.getSetSimbolo + "°";
-                            listEstadosLR1.Add(auxIR_A);
-                            if (listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Contains('r'))                           
+                            if (auxIR_A != null)
                             {
-                                listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion = listEstadosLR1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion.Replace('r', 's');
+                                //este es el caso de las orejas
+                                auxTransicion = i + "°" +X.getSetSimbolo + "°" + getListaEstadosLr1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion + getIniceEstado(listEstadosLR1, auxIR_A);
+                                // auxTransicion += 
+                                transicionesLr1.Add(auxTransicion);
+                                auxTransicion = "";
                             }
-                            auxTransicion += getListaEstadosLr1[getIniceEstado(listEstadosLR1, auxIR_A)].getSetListAccion + (listEstadosLR1.Count - 1);
-                            transicionesLr1.Add(auxTransicion);
-                            auxTransicion = "";
                         }
                     }
                 }
-
             }
             for (int i = 0; i < listEstadosLR1.Count; i++)
             {
@@ -253,6 +295,10 @@ namespace LR1Tokenizado2018
             bool res = false;
             for (int i = 0; i < listaEstados.Count; i++)
             {
+                if (i == 5)
+                {
+
+                }
                 //  if(i!=indice)
                 res = comparaEstados(listaEstados[i], unEdo);
 
@@ -265,21 +311,28 @@ namespace LR1Tokenizado2018
         public bool comparaEstados(EdoLR1 estado1, EdoLR1 estado2)
         {
             bool res = false;
+            bool noSonIguales = false;
             int contador = 0;//para ver si todos los elementos son iguales
             if (estado1.getSetListElementos.Count == estado2.getSetListElementos.Count)//para empezar deben de tener el mismo numero de elementos
             {
-                foreach (ElementoLR1 elemento1 in estado1.getSetListElementos)
-                {
-                    foreach (ElementoLR1 elemento2 in estado2.getSetListElementos)
-                    {
-                        if (comparaElementosLR1(elemento1, elemento2))
+               for(int i = 0; i < estado1.getSetListElementos.Count; i++)
+                { 
+
+                        if (comparaElementosLR1(estado1.getSetListElementos[i], estado2.getSetListElementos[i]))
                         {
                             contador++;
 
                         }
+                        else
+                        {
+                            noSonIguales = true;
+                            break;
+                            
+                        }
 
                     }
-                }
+                    
+                
                 if (contador == estado1.getSetListElementos.Count)
                     res = true;//se compara si el numero de veces que los elementos fueron iguales es la misma cantidad de elementos entonces los objetos son iguales 
                                //solo tienen los elementos en otro orden
@@ -292,26 +345,28 @@ namespace LR1Tokenizado2018
 
             if (elem1.getSetSimbolo == elem2.getSetSimbolo)// se compara si tienen el mismo simbolo
             {
-                foreach(Token t in elem1.getSetListaProduccion)
+                if (!elem1.getSetLadocAdelanto.SequenceEqual(elem2.getSetLadocAdelanto))//para que sea el mismo elemento debe de tener el mismo caracter de adelanto
+                    return false;
+
+                if (elem1.getSetListaProduccion.Count == elem2.getSetListaProduccion.Count)
                 {
-                    foreach(Token t1 in elem2.getSetListaProduccion)
+                    for(int i = 0; i < elem1.getSetListaProduccion.Count; i++)
                     {
-                        if(t.getSetSimbolo!=elem2.getSetSimbolo)
-                        {
+                        if (elem1.getSetListaProduccion[i].getSetSimbolo != elem2.getSetListaProduccion[i].getSetSimbolo)
                             return false;
-                        }
-                            
-                    }
-                }
-                foreach(string primElement1 in elem1.getSetLadocAdelanto)
-                {
-                    foreach(string primElement2 in elem2.getSetLadocAdelanto)
-                    {
-                        if (primElement1 != primElement2)//los caracteres de adelanto deben de ser iguales, si no es un elemento distinto
+                        if (elem1.getSetListaProduccion[i].getSetAnalizador != elem2.getSetListaProduccion[i].getSetAnalizador)
                             return false;
                     }
                 }
+                else
+                {
+                    return false;//quiere decir que no producen lo mismo
+                }
+        
+               
             }
+            else
+                return false;
 
             return res;
         }
@@ -361,7 +416,10 @@ namespace LR1Tokenizado2018
                         i++;
                         if (i < cadSeparar.Count)
                         {
-                            res.Add(retornaTokenInicial(cadSeparar[i]));//este seria beta
+                            if (cadSeparar[i].getSetNoTerminal)//si beta es no terminal
+                                res.Add(retornaTokenInicial(cadSeparar[i]));//este seria beta
+                            else
+                                res.Add(retornaTokenInicialTerminal(cadSeparar[i]));
                         }
                         else
                         {
@@ -376,6 +434,16 @@ namespace LR1Tokenizado2018
 
             return res;
 
+
+        }
+        public Token retornaTokenInicialTerminal(Token unToken)
+        {
+            foreach (Token t in gramatica.getSetTerminales)
+            {
+                if (t.getSetSimbolo == unToken.getSetSimbolo)
+                    return t;
+            }
+            return null;
 
         }
 

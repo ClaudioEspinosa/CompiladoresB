@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LR1Tokenizado2018
 {
-    class Token
+    class Token:ICloneable
     {
         private string simbolo;///<Es la cadena que representa al token (identificador)
         private bool noTerminal;///<Bandera para saber si el simbolo es terminal o no
@@ -19,6 +19,14 @@ namespace LR1Tokenizado2018
             noTerminal = false;//valor por default
             listaProducciones = new List<List<Token>>();
             analizador = false;//tiene la misma funcion que el analizador ¬
+        }
+        public Token(string unSimbolo,List<string>unPrimero,bool unNoterminal, List<List<Token>>unListaProducciones,bool unAnalizador)
+        {
+            simbolo = unSimbolo;
+            primero = unPrimero;
+            noTerminal = unNoterminal;
+            listaProducciones = unListaProducciones;
+            analizador = unAnalizador;
         }
         
         public List<List<Token>> getSetListaProducciones
@@ -44,7 +52,12 @@ namespace LR1Tokenizado2018
         public bool getSetAnalizador
         {
             get { return analizador; }
-            set { analizador = true; }
+            set { analizador = value; }
+        }
+
+        public object Clone()
+        {
+            return new Token(this.getSetSimbolo,this.primero,this.noTerminal, this.listaProducciones,this.getSetAnalizador);
         }
     }
 }
