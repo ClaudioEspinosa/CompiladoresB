@@ -44,6 +44,9 @@ namespace LR1Tokenizado2018
                 gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
                 visualizaNTyT();
                 gramatica.primero();
+
+
+             
             }
             catch (Exception ex)
             {
@@ -58,6 +61,7 @@ namespace LR1Tokenizado2018
                 abrir();
                 lr1 = new LR1(gramatica);
                 lr1.elementos();
+                visualizaTablaAS();
             }
             catch (Exception ex)
             {
@@ -169,6 +173,11 @@ namespace LR1Tokenizado2018
                 GridAnalisisSintact.Rows[ren].Cells[col + 1].Value = aux[2];//columnas +1 porque la columna 0 es el numero del estado
 
             }
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
     }

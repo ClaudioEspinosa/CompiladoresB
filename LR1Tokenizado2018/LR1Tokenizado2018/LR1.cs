@@ -215,9 +215,6 @@ namespace LR1Tokenizado2018
                 
             }
 
-
-
-
             ///aqui se hace la parte de return cerradura de J
             if (entro)
                 return cerradura(J);
@@ -336,10 +333,6 @@ namespace LR1Tokenizado2018
             bool res = false;
             for (int i = 0; i < listaEstados.Count; i++)
             {
-                if (i == 5)
-                {
-
-                }
                 //  if(i!=indice)
                 res = comparaEstados(listaEstados[i], unEdo);
 
