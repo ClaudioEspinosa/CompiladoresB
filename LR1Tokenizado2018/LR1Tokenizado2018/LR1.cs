@@ -118,10 +118,51 @@ namespace LR1Tokenizado2018
                 {
                     //retornar el false de analizado para que sevea igual que en el libro
                     auxEdo.getSetCompleto = true;
-                   
+                    auxEdo.getSetIndiceReduccion = getIndiceProduccion(auxEdo.getSetListElementos[i].getSetListaProduccion);
+
+
                 }
             }
             return auxEdo;
+        }
+        /**
+         * @brief Método para comparar dos listas de tokens
+         * @param lista1 primer lista a comparar
+         * @param lista2 segunda lista a comparar
+         * @return true si las dos listas son iguales
+         * **/
+        public bool comparaListTokens(List<Token> lista1,List<Token> lista2)
+        {
+            bool res = true;
+            if (lista1.Count == lista2.Count)
+            {
+                for (int i = 0; i < lista1.Count; i++)
+                {
+                    if (lista1[i].getSetSimbolo != lista2[i].getSetSimbolo)
+                        return false;
+                }
+            }
+            else
+            {
+                return false;//quiere decir que no producen lo mismo
+            }
+            return res;
+        }
+        /***
+         *@brief Método que retorna el indice de una produccion de acuerdo a los elementos iniciale 
+         * @return retorna un indice
+         * */
+        public int getIndiceProduccion(List<Token> unLadoDer)
+        {
+          
+            for (int i = 0; i < listElemIniciales.Count; i++)
+            {
+                if (comparaListTokens(listElemIniciales[i].getSetListaProduccion,unLadoDer))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
         public List<Token> copiaCadTokens(List<Token> listaAcopiar)
         {
@@ -460,6 +501,11 @@ namespace LR1Tokenizado2018
         public List<EdoLR1> getListaEstadosLr1 //metodo que regresa al form la lista par visualizarla en el form
         {
             get { return listEstadosLR1; }
+        }
+
+        public List<String> getTransicionesLr1
+        {
+            get { return transicionesLr1; }
         }
     }
 }

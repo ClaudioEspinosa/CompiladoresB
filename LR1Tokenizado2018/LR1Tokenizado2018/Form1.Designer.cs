@@ -33,7 +33,10 @@
             this.lR1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.treeViewNTT = new System.Windows.Forms.TreeView();
+            this.labelTAS = new System.Windows.Forms.Label();
+            this.GridAnalisisSintact = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GridAnalisisSintact)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -42,7 +45,7 @@
             this.algoritmosToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(962, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -65,7 +68,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(587, 37);
+            this.label2.Location = new System.Drawing.Point(758, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(182, 13);
             this.label2.TabIndex = 8;
@@ -73,16 +76,36 @@
             // 
             // treeViewNTT
             // 
-            this.treeViewNTT.Location = new System.Drawing.Point(589, 63);
+            this.treeViewNTT.Location = new System.Drawing.Point(760, 63);
             this.treeViewNTT.Name = "treeViewNTT";
             this.treeViewNTT.Size = new System.Drawing.Size(199, 264);
             this.treeViewNTT.TabIndex = 7;
+            // 
+            // labelTAS
+            // 
+            this.labelTAS.AutoSize = true;
+            this.labelTAS.ForeColor = System.Drawing.Color.Black;
+            this.labelTAS.Location = new System.Drawing.Point(235, 37);
+            this.labelTAS.Name = "labelTAS";
+            this.labelTAS.Size = new System.Drawing.Size(137, 13);
+            this.labelTAS.TabIndex = 10;
+            this.labelTAS.Text = "Tabla de Analisis Sintactico";
+            // 
+            // GridAnalisisSintact
+            // 
+            this.GridAnalisisSintact.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GridAnalisisSintact.Location = new System.Drawing.Point(238, 63);
+            this.GridAnalisisSintact.Name = "GridAnalisisSintact";
+            this.GridAnalisisSintact.Size = new System.Drawing.Size(489, 264);
+            this.GridAnalisisSintact.TabIndex = 9;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(962, 450);
+            this.Controls.Add(this.labelTAS);
+            this.Controls.Add(this.GridAnalisisSintact);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.treeViewNTT);
             this.Controls.Add(this.menuStrip1);
@@ -91,6 +114,7 @@
             this.Text = "Compiladores B";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GridAnalisisSintact)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -103,6 +127,8 @@
         private System.Windows.Forms.ToolStripMenuItem lR1ToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TreeView treeViewNTT;
+        private System.Windows.Forms.Label labelTAS;
+        private System.Windows.Forms.DataGridView GridAnalisisSintact;
     }
 }
 
