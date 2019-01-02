@@ -61,6 +61,7 @@ namespace LR1Tokenizado2018
                 abrir();
                 lr1 = new LR1(gramatica);
                 lr1.elementos();
+                visualizaEdos();
                 visualizaTablaAS();
             }
             catch (Exception ex)
@@ -176,9 +177,29 @@ namespace LR1Tokenizado2018
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void visualizaEdos()
         {
-
+            List<EdoLR1> aux = lr1.getListaEstadosLr1;
+            string auxCadProduccion = "";
+            string auxCadcAdelanto = "";
+            for (int i = 0; i < aux.Count; i++)
+            {
+                treeViewEdoAFD.Nodes.Add("Estado " + i);
+                foreach (ElementoLR1 elemento in aux[i].getSetListElementos)
+                {
+                    foreach (Token t in elemento.getSetListaProduccion)
+                    {
+                        auxCadProduccion += t.getSetSimbolo;
+                    }
+                    foreach (string t in elemento.getSetLadocAdelanto)
+                    {
+                        auxCadcAdelanto += t;
+                    }
+                    treeViewEdoAFD.Nodes[i].Nodes.Add(elemento.getSetSimbolo + "->" + auxCadProduccion + "," + auxCadcAdelanto);
+                    auxCadProduccion = "";
+                    auxCadcAdelanto = "";
+                }
+            }
         }
     }
 }

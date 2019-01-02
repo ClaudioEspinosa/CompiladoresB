@@ -78,7 +78,7 @@
             // 
             // treeViewNTT
             // 
-            this.treeViewNTT.Location = new System.Drawing.Point(527, 63);
+            this.treeViewNTT.Location = new System.Drawing.Point(528, 63);
             this.treeViewNTT.Name = "treeViewNTT";
             this.treeViewNTT.Size = new System.Drawing.Size(199, 264);
             this.treeViewNTT.TabIndex = 7;
@@ -133,7 +133,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Compiladores B";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridAnalisisSintact)).EndInit();
