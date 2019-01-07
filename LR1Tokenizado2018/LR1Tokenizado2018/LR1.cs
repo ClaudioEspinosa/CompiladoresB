@@ -95,6 +95,10 @@ namespace LR1Tokenizado2018
                                     nuevo.retornaAnalizador();
                                     if (!contieneEdoElemento(auxEdo, nuevo))
                                         auxEdo.getSetListElementos.Add(nuevo);
+                                    else
+                                    {
+
+                                    }
                                     
 
 
@@ -105,6 +109,10 @@ namespace LR1Tokenizado2018
                                     nuevo.retornaAnalizador();
                                     if (!contieneEdoElemento(auxEdo, nuevo))
                                         auxEdo.getSetListElementos.Add(nuevo);
+                                    else
+                                    {
+
+                                    }
 
                                 }
 
@@ -243,7 +251,7 @@ namespace LR1Tokenizado2018
                 {
                     foreach (Token X in gramatica.getSetElemGramaticales)//por cada simbolo gramatical X
                     {
-                        if (i == 5 && X.getSetSimbolo == "(")
+                        if (i == 270 && X.getSetSimbolo == "(")
                         {
 
                         }
@@ -415,22 +423,28 @@ namespace LR1Tokenizado2018
                 {
                     if (elem.getSetListaProduccion.Count == unElemento.getSetListaProduccion.Count)
                     {
-                        foreach (Token t1 in elem.getSetListaProduccion)
-                        {
-                            foreach (Token t2 in unElemento.getSetListaProduccion)
+                       
+                            for(int i=0;i<elem.getSetListaProduccion.Count;i++)
                             {
-                                if (t1.getSetSimbolo != t2.getSetSimbolo)
+                                if (elem.getSetListaProduccion[i].getSetSimbolo != unElemento.getSetListaProduccion[i].getSetSimbolo)
                                     res = false;
                             }
-                        }
+                        
                     }
                     else
                         res = false;
+
+                    if (res)
+                    {
+                        elem.getSetLadocAdelanto = elem.getSetLadocAdelanto.Concat(unElemento.getSetLadocAdelanto).ToList();
+                        return res;
+                    }
                 }
                 else
                     res = false;
+                
             }
-
+          
             return res;
         }
         /**

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace LR1Tokenizado2018
 {
+    [Serializable]
     class Gramatica
     {
         private List<string> listaRenglones;

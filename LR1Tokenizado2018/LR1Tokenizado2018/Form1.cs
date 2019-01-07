@@ -17,6 +17,7 @@ namespace LR1Tokenizado2018
         string cadAbrir = "";///< representa a la cadena que se abrira, todo el archivo se lee primero como una cadena grande, despues de debe separar por renglones
         string[] renglonesArch;///< representa los renglones del archivo de la grámatica 
         Gramatica gramatica;
+        private tablaAnalisisS tablaDeAs; ///<variable que realizará la tabla de analisis sintactico
         private List<string> columnas;//guarda las columnas del datagrid tabla de analisis sintactico // es la union de los terminales y no terminales (listas)
         LR1 lr1;
         public Form1()
@@ -43,7 +44,7 @@ namespace LR1Tokenizado2018
 
                 gramatica = new Gramatica(renglonesArch.ToList());///<Se crea la variable para el manejo de la gramática
                 visualizaNTyT();
-                gramatica.primero();
+             
 
 
              
@@ -59,6 +60,7 @@ namespace LR1Tokenizado2018
             try
             {
                 abrir();
+                gramatica.primero();
                 lr1 = new LR1(gramatica);
                 lr1.elementos();
                 visualizaEdos();
@@ -156,6 +158,8 @@ namespace LR1Tokenizado2018
             }
 
             llenaDataGrid(lr1.getTransicionesLr1);
+            tablaDeAs = new tablaAnalisisS(columnas, lr1.getListaEstadosLr1.Count, lr1.getTransicionesLr1);
+            serializaTabla(tablaDeAs);
         }
         /// <summary>
         /// Funcion para llenar el datagrid de tabla de analisis sintactico
@@ -200,6 +204,36 @@ namespace LR1Tokenizado2018
                     auxCadcAdelanto = "";
                 }
             }
+        }
+
+        private void btnAnalisis_Click(object sender, EventArgs e)
+        {
+            string[] palabras;
+            try
+            {
+                string cadenaEntrada = "";
+                TablaAcciones tablaAciones;
+                if (textCodFuente.Text.Length > 0)
+                {
+                    palabras = textCodFuente.Text.Split(' ');
+                    if (gramatica == null)
+                    {
+                        abrir();
+                        tablaAciones = new TablaAcciones(gramatica.getListaProducciones, palabras.ToList());
+                    }
+                    else
+                    {
+                        tablaAciones = new TablaAcciones(gramatica.getListaProducciones, palabras.ToList());
+                    }
+                  //  llenaDataAcciones(tablaAciones.getPilaAS, tablaAciones.getCadEntrada, tablaAciones.getAcciones);
+
+                }
+            }
+            catch (Exception evt)
+            {
+                MessageBox.Show("Error al analizar " + evt);
+            }
+
         }
     }
 }
